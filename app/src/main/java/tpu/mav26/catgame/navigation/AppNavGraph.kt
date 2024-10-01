@@ -1,6 +1,5 @@
 package tpu.mav26.catgame.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -30,7 +29,7 @@ fun AppNavGraph(
             SplashScreen(navController = navController)
         }
 
-        composable(Routes.CAT_GAME_GAME) {  }
+        composable(Routes.CAT_GAME_GAME) { }
 
         navigation(startDestination = Routes.CAT_GAME_MAIN, route = Routes.CAT_GAME_HOME) {
             composable(Routes.CAT_GAME_MAIN) {
@@ -45,9 +44,23 @@ fun AppNavGraph(
                         )
                     }
                 ) { innerPadding ->
-                    when(Consts.BottomBarItems[selectedScreen].route) {
-                        Routes.CAT_GAME_SETTINGS -> Settings(modifier = modifier.padding(innerPadding))
-                        Routes.CAT_GAME_MAIN -> CatGameMain(modifier = modifier.padding(innerPadding))
+                    when (Consts.BottomBarItems[selectedScreen].route) {
+                        Routes.CAT_GAME_SETTINGS -> Settings(
+                            modifier = modifier.padding(
+                                innerPadding
+                            )
+                        )
+
+                        Routes.CAT_GAME_MAIN -> CatGameMain(
+                            modifier = modifier.padding(innerPadding),
+                            onStart = {
+                                navController.navigate(Routes.CAT_GAME_GAME) {
+                                    popUpTo(Routes.CAT_GAME_MAIN) {
+                                        inclusive = true
+                                    }
+                                }
+                            })
+
                         Routes.CAT_GAME_SCORE -> Score(modifier = modifier.padding(innerPadding))
                     }
                 }

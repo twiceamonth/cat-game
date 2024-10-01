@@ -34,7 +34,11 @@ fun SplashScreen(navController: NavHostController) {
                 })
         )
         delay(3000L)
-        navController.navigate(Routes.CAT_GAME_HOME)
+        navController.navigate(Routes.CAT_GAME_HOME) {
+            popUpTo(Routes.CAT_GAME_SPLASH) {
+                inclusive = true
+            }
+        }
     }
 
     Box(
