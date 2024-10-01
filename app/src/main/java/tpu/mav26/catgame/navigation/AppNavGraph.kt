@@ -1,6 +1,7 @@
 package tpu.mav26.catgame.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +16,7 @@ import androidx.navigation.compose.navigation
 import tpu.mav26.catgame.Consts
 import tpu.mav26.catgame.ui.conponents.MenuBottomBar
 import tpu.mav26.catgame.ui.screens.CatGameMain
+import tpu.mav26.catgame.ui.screens.Game
 import tpu.mav26.catgame.ui.screens.Score
 import tpu.mav26.catgame.ui.screens.Settings
 import tpu.mav26.catgame.ui.screens.SplashScreen
@@ -29,7 +31,18 @@ fun AppNavGraph(
             SplashScreen(navController = navController)
         }
 
-        composable(Routes.CAT_GAME_GAME) { }
+        composable(Routes.CAT_GAME_GAME) {
+            Game(
+                modifier = modifier,
+                onGoHome = {
+                    navController.navigate(Routes.CAT_GAME_HOME) {
+                        popUpTo(Routes.CAT_GAME_GAME) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
 
         navigation(startDestination = Routes.CAT_GAME_MAIN, route = Routes.CAT_GAME_HOME) {
             composable(Routes.CAT_GAME_MAIN) {
