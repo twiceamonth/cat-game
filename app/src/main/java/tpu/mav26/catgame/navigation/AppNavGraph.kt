@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import tpu.mav26.catgame.CatGameViewModel
 import tpu.mav26.catgame.Consts
 import tpu.mav26.catgame.ui.conponents.MenuBottomBar
 import tpu.mav26.catgame.ui.screens.CatGameMain
@@ -23,6 +24,7 @@ import tpu.mav26.catgame.ui.screens.SplashScreen
 
 @Composable
 fun AppNavGraph(
+    viewModel: CatGameViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -59,6 +61,7 @@ fun AppNavGraph(
                 ) { innerPadding ->
                     when (Consts.BottomBarItems[selectedScreen].route) {
                         Routes.CAT_GAME_SETTINGS -> Settings(
+                            viewModel = viewModel,
                             modifier = modifier.padding(
                                 innerPadding
                             )

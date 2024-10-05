@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -18,13 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import tpu.mav26.catgame.CatGameViewModel
 import tpu.mav26.catgame.ui.conponents.SettingsElement
 
 @Composable
-fun Settings(modifier: Modifier = Modifier) {
-    var mouseSize by remember { mutableIntStateOf(3) }
-    var mouseCount by remember { mutableIntStateOf(3) }
-    var mouseSpeed by remember { mutableIntStateOf(3) }
+fun Settings(
+    viewModel: CatGameViewModel,
+    modifier: Modifier = Modifier
+) {
+    val settingsState by viewModel.settingsState.collectAsState()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,24 +49,24 @@ fun Settings(modifier: Modifier = Modifier) {
 
         SettingsElement(
             title = "Размер мышки",
-            currentValue = mouseSize,
-            onValueChanged = { mouseSize = it }
+            currentValue = settingsState.mouseSize,
+            onValueChanged = { viewModel.changeMouseSize(it) }
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
         SettingsElement(
             title = "Количество мышек",
-            currentValue = mouseCount,
-            onValueChanged = { mouseCount = it }
+            currentValue = settingsState.mouseCount,
+            onValueChanged = { viewModel.changeMouseCount(it) }
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
         SettingsElement(
             title = "Скорость мышек",
-            currentValue = mouseSpeed,
-            onValueChanged = { mouseSpeed = it }
+            currentValue = settingsState.mouseSpeed,
+            onValueChanged = { viewModel.changeMouseSpeed(it) }
         )
     }
 }
