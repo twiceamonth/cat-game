@@ -77,7 +77,10 @@ fun AppNavGraph(
                                 }
                             })
 
-                        Routes.CAT_GAME_SCORE -> Score(modifier = modifier.padding(innerPadding))
+                        Routes.CAT_GAME_SCORE -> Score(
+                            viewModel = viewModel,
+                            modifier = modifier.padding(innerPadding)
+                        )
                     }
                 }
             }

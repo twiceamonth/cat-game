@@ -21,9 +21,10 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import tpu.mav26.catgame.data.database.ScoreRowItem
 
 @Composable
-fun ScoreListItem(/*TODO: item: ScoreListItem*/ index: Int) {
+fun ScoreListItem(item: ScoreRowItem, index: Int) {
     val textStyle = TextStyle(
         fontSize = 24.sp,
         fontWeight = FontWeight.Normal
@@ -45,7 +46,7 @@ fun ScoreListItem(/*TODO: item: ScoreListItem*/ index: Int) {
                 ),
         ) {
             Text(
-                text = "1",
+                text = (index + 1).toString(),
                 style = textStyle
             )
         }
@@ -58,7 +59,7 @@ fun ScoreListItem(/*TODO: item: ScoreListItem*/ index: Int) {
                 .border(border = BorderStroke(1.dp, Color.Black)),
         ) {
             Text(
-                text = "234",
+                text = item.allClicks.toString(),
                 style = textStyle
             )
         }
@@ -79,7 +80,7 @@ fun ScoreListItem(/*TODO: item: ScoreListItem*/ index: Int) {
             ) {
                 Text(
                     text = buildAnnotatedString {
-                        append("234 ")
+                        append(item.hitClicks.toString() + " ")
                         withStyle(
                             SpanStyle(
                                 baselineShift = BaselineShift.None, fontSize = 14.sp,
@@ -87,7 +88,7 @@ fun ScoreListItem(/*TODO: item: ScoreListItem*/ index: Int) {
                                 color = Color.Gray
                             )
                         ) {
-                            append("10%")
+                            append(item.hitPercentage.toString() + "%")
                         }
                     },
                     style = textStyle
