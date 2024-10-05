@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import tpu.mav26.catgame.data.database.ScoreRowItem
 
 @Composable
-fun ScoreListItem(item: ScoreRowItem, index: Int) {
+fun ScoreListItem(item: ScoreRowItem, index: Int, allItemCount: Int) {
     val textStyle = TextStyle(
         fontSize = 24.sp,
         fontWeight = FontWeight.Normal
@@ -41,8 +41,8 @@ fun ScoreListItem(item: ScoreRowItem, index: Int) {
                 .fillMaxWidth(0.1f)
                 .border(
                     border = BorderStroke(1.dp, Color.Black),
-                    shape = if (index == 9) RoundedCornerShape(bottomStart = 15.dp)
-                            else RoundedCornerShape(0.dp)
+                    shape = if (index == allItemCount-1) RoundedCornerShape(bottomStart = 15.dp)
+                    else RoundedCornerShape(0.dp)
                 ),
         ) {
             Text(
@@ -71,8 +71,8 @@ fun ScoreListItem(item: ScoreRowItem, index: Int) {
                 .fillMaxHeight()
                 .border(
                     border = BorderStroke(1.dp, Color.Black),
-                    shape = if (index == 9) RoundedCornerShape(bottomEnd = 15.dp)
-                            else RoundedCornerShape(0.dp)
+                    shape = if (index == allItemCount-1) RoundedCornerShape(bottomEnd = 15.dp)
+                    else RoundedCornerShape(0.dp)
                 ),
         ) {
             Row(

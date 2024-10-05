@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -20,19 +21,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import tpu.mav26.catgame.CatGameViewModel
 
 @Composable
 fun Game(
+    viewModel: CatGameViewModel,
     modifier: Modifier = Modifier,
     onGoHome: () -> Unit
 ) {
-    var hitedTaps by remember { mutableIntStateOf(0) }
-    var allTaps by remember { mutableIntStateOf(0) }
+    val gameState by viewModel.gameState.collectAsState()
     var isShowDialog by remember { mutableStateOf(false) }
 
     Box(modifier = modifier
         .fillMaxSize()
-        .clickable { allTaps++ }
+        .clickable { viewModel.plusClick() }
     ) {
         ExitDialog(
             isShowDialog = isShowDialog,
@@ -52,7 +54,7 @@ fun Game(
             modifier = modifier
                 .fillMaxSize()
         ) {
-            Text(text = "$hitedTaps/$allTaps")
+            Text(text = "${gameState.hitClicks}/${gameState.allCLicks}")
         }
     }
 }
@@ -66,7 +68,12 @@ fun ExitDialog(
     if (isShowDialog) {
         AlertDialog(
             title = { Text("Выход в меню") },
-            text = { Text("Вы действительно хотите выйти в меню?") },
+            text = {
+                Text(
+                    "Вы действительно хотите выйти в меню?" +
+                            "\nНабранные очки будут сохранены!"
+                )
+            },
             onDismissRequest = { },
             confirmButton = {
                 TextButton(

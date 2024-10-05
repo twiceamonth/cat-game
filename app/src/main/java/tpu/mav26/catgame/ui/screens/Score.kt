@@ -55,7 +55,13 @@ fun Score(
         if (scoreState != null && scoreState!!.isNotEmpty()) {
             LazyColumn {
                 item { ScoreListHeader() }
-                items(10) { index -> ScoreListItem(scoreState!![index], index) }
+                items(scoreState!!.size) { index ->
+                    ScoreListItem(
+                        scoreState!![index],
+                        index,
+                        scoreState!!.size
+                    )
+                }
             }
         } else {
             Box(

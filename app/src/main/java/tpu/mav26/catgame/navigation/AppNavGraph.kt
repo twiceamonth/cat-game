@@ -35,8 +35,10 @@ fun AppNavGraph(
 
         composable(Routes.CAT_GAME_GAME) {
             Game(
+                viewModel = viewModel,
                 modifier = modifier,
                 onGoHome = {
+                    viewModel.onExitSaveScore()
                     navController.navigate(Routes.CAT_GAME_HOME) {
                         popUpTo(Routes.CAT_GAME_GAME) {
                             inclusive = true

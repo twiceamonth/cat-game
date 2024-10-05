@@ -11,7 +11,7 @@ interface Dao {
     @Query("SELECT * FROM Settings")
     fun getSettings(): Settings
 
-    @Query("SELECT * FROM ScoreRowItem ORDER BY id DESC LIMIT 10")
+    @Query("SELECT * FROM ScoreRowItem ORDER BY id LIMIT 10")
     fun getScore(): List<ScoreRowItem>
 
     @Update
