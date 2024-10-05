@@ -11,11 +11,9 @@ data class Settings(
     var mouseSpeed: Int = 3
 )
 
-// поздно я понял что тут лишнее поле position, но миграции мне лень делать
 @Entity
 data class ScoreRowItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val position: Int,
     val allClicks: Int,
     val hitClicks: Int,
     val hitPercentage: Int,

@@ -12,6 +12,8 @@ import tpu.mav26.catgame.data.database.CatGameDataBase
 import tpu.mav26.catgame.data.database.ScoreRowItem
 import tpu.mav26.catgame.data.database.Settings
 import tpu.mav26.catgame.data.model.GameState
+import tpu.mav26.catgame.data.model.Mouse
+import kotlin.random.Random
 
 class CatGameViewModel(context: Context) : ViewModel() {
     private val db = Room.databaseBuilder(
@@ -19,6 +21,8 @@ class CatGameViewModel(context: Context) : ViewModel() {
         CatGameDataBase::class.java,
         "cat_game_db"
     ).build()
+
+    /*              States              */
 
     private val _settingsState = MutableStateFlow(Settings())
     val settingsState: StateFlow<Settings> = _settingsState
@@ -34,21 +38,51 @@ class CatGameViewModel(context: Context) : ViewModel() {
             _settingsState.value = db.dao().getSettings()
             _scoreState.value = db.dao().getScore()
         }
+        // при первом заупуске приложния чтобы были мышки
+        changeMouseCount(_settingsState.value.mouseCount)
     }
 
     /*              Settings                */
-    // TODO: подумать может можно 3 функции в 1 соеденить
+
     fun changeMouseSize(newVal: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _settingsState.value = _settingsState.value.copy(
                 mouseSize = newVal
             )
             db.dao().updateSettings(_settingsState.value)
+
+            _gameState.value.mouseList.forEach {
+                it.size = Consts.baseMouseSize * newVal
+            }
         }
     }
 
     fun changeMouseCount(newVal: Int) {
         viewModelScope.launch(Dispatchers.IO) {
+            while (newVal > _gameState.value.mouseList.size ) {
+                _gameState.value = _gameState.value.copy(
+                    mouseList = _gameState.value.mouseList.plus(
+                        Mouse(
+                            Consts.baseMouseSize,
+                            R.drawable.cat_splash
+                        )
+                    )
+                )
+            }
+
+            if (newVal < _settingsState.value.mouseCount) {
+                while (_gameState.value.mouseList.size > newVal) {
+                    _gameState.value = _gameState.value.copy(
+                        mouseList = _gameState.value.mouseList.minus(
+                            _gameState.value.mouseList[Random.nextInt(
+                                0,
+                                _gameState.value.mouseList.size
+                            )]
+                        )
+                    )
+                }
+            }
+
             _settingsState.value = _settingsState.value.copy(
                 mouseCount = newVal
             )
@@ -71,24 +105,27 @@ class CatGameViewModel(context: Context) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val hetPerc =
                 if (_gameState.value.hitClicks == 0) 0
-                else (_gameState.value.allCLicks / _gameState.value.hitClicks) * 100
+                else (_gameState.value.hitClicks.toDouble() / _gameState.value.allClicks) * 100
 
             val newScoreItem = ScoreRowItem(
-                position = 0,
-                allClicks = _gameState.value.allCLicks,
+                allClicks = _gameState.value.allClicks,
                 hitClicks = _gameState.value.hitClicks,
-                hitPercentage = hetPerc
+                hitPercentage = hetPerc.toInt()
             )
             db.dao().addNewScore(newScoreItem)
             _scoreState.value = _scoreState.value?.plus(newScoreItem)
-            _gameState.value = GameState()
+            _scoreState.value = db.dao().getScore()
+            _gameState.value = _gameState.value.copy(
+                allClicks = 0,
+                hitClicks = 0,
+                mouseList = _gameState.value.mouseList
+            )
         }
-
     }
 
     fun plusClick() {
         _gameState.value = _gameState.value.copy(
-            allCLicks = _gameState.value.allCLicks + 1
+            allClicks = _gameState.value.allClicks + 1
         )
     }
 
