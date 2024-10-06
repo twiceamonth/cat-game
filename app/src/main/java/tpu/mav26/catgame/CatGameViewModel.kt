@@ -108,31 +108,27 @@ class CatGameViewModel(context: Context) : ViewModel() {
     fun changeMouseCount(newVal: Int) {
         viewModelScope.launch {
             stateMutex.withLock {
-                withContext(Dispatchers.IO) {
-                    while (newVal > _gameState.value.mouseList.size) {
-                        _gameState.value = _gameState.value.copy(
-                            mouseList = _gameState.value.mouseList.plus(
-                                Mouse(
-                                    Consts.baseMouseSize,
-                                    mouseImageList[Random.nextInt(0, 3)]
-                                )
+                while (newVal > _gameState.value.mouseList.size) {
+                    _gameState.value = _gameState.value.copy(
+                        mouseList = _gameState.value.mouseList.plus(
+                            Mouse(
+                                Consts.baseMouseSize,
+                                mouseImageList[Random.nextInt(0, 3)]
                             )
                         )
-                    }
+                    )
                 }
 
-                withContext(Dispatchers.IO) {
-                    if (newVal < _settingsState.value.mouseCount) {
-                        while (_gameState.value.mouseList.size > newVal) {
-                            _gameState.value = _gameState.value.copy(
-                                mouseList = _gameState.value.mouseList.minus(
-                                    _gameState.value.mouseList[Random.nextInt(
-                                        0,
-                                        _gameState.value.mouseList.size
-                                    )]
-                                )
+                if (newVal < _settingsState.value.mouseCount) {
+                    while (_gameState.value.mouseList.size > newVal) {
+                        _gameState.value = _gameState.value.copy(
+                            mouseList = _gameState.value.mouseList.minus(
+                                _gameState.value.mouseList[Random.nextInt(
+                                    0,
+                                    _gameState.value.mouseList.size
+                                )]
                             )
-                        }
+                        )
                     }
                 }
 
