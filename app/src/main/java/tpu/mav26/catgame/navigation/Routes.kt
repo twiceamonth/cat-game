@@ -7,6 +7,4 @@ object Routes {
     const val CAT_GAME_SCORE = "cat_game_score"
 
     const val CAT_GAME_GAME = "cat_game_game"
-
-    const val CAT_GAME_SPLASH = "cat_game_splash"
 }
