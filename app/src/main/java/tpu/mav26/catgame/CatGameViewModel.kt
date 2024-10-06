@@ -1,6 +1,10 @@
 package tpu.mav26.catgame
 
 import android.content.Context
+import android.os.Build
+import android.util.DisplayMetrics
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
@@ -24,6 +28,9 @@ class CatGameViewModel(context: Context) : ViewModel() {
 
     /*              States              */
 
+    val mouseImageList = mutableListOf<Int>()
+    val bcgImageList = mutableListOf<Int>()
+
     private val _settingsState = MutableStateFlow(Settings())
     val settingsState: StateFlow<Settings> = _settingsState
 
@@ -38,6 +45,24 @@ class CatGameViewModel(context: Context) : ViewModel() {
             _settingsState.value = db.dao().getSettings()
             _scoreState.value = db.dao().getScore()
         }
+
+        for (i in 1..4) {
+            mouseImageList.add(
+                context.resources.getIdentifier(
+                    "m_$i",
+                    "drawable",
+                    context.packageName
+                )
+            )
+            bcgImageList.add(
+                context.resources.getIdentifier(
+                    "b_$i",
+                    "drawable",
+                    context.packageName
+                )
+            )
+        }
+
         // при первом заупуске приложния чтобы были мышки
         changeMouseCount(_settingsState.value.mouseCount)
     }
@@ -52,19 +77,26 @@ class CatGameViewModel(context: Context) : ViewModel() {
             db.dao().updateSettings(_settingsState.value)
 
             _gameState.value.mouseList.forEach {
-                it.size = Consts.baseMouseSize * newVal
+                it.size = when(newVal) {
+                    1 -> Consts.baseMouseSize * newVal // 50
+                    2 -> Consts.baseMouseSize * newVal - 40 // 60
+                    3 -> Consts.baseMouseSize * newVal - 80 // 70
+                    4 -> Consts.baseMouseSize * newVal - 120 // 80
+                    5 -> Consts.baseMouseSize * newVal - 160 // 90
+                    else -> Consts.baseMouseSize
+                }
             }
         }
     }
 
     fun changeMouseCount(newVal: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            while (newVal > _gameState.value.mouseList.size ) {
+            while (newVal > _gameState.value.mouseList.size) {
                 _gameState.value = _gameState.value.copy(
                     mouseList = _gameState.value.mouseList.plus(
                         Mouse(
                             Consts.baseMouseSize,
-                            R.drawable.cat_splash
+                            mouseImageList[Random.nextInt(0, 3)]
                         )
                     )
                 )
@@ -131,7 +163,7 @@ class CatGameViewModel(context: Context) : ViewModel() {
 
     fun plusHitClick() {
         _gameState.value = _gameState.value.copy(
-            hitClicks = _gameState.value.hitClicks + 1
+            hitClicks = _gameState.value.hitClicks + 1,
         )
     }
 }

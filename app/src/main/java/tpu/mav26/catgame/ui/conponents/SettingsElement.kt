@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -109,7 +110,10 @@ fun AnimatedNumber(
         modifier = Modifier
             .size(40.dp)
             .offset(y = offset)
-            .background(if (isSelected) Color.Green else Color.Gray)
+            .background(
+                color = if (isSelected) Color.Green else Color.Gray,
+                shape = RoundedCornerShape(15.dp)
+            )
     ) {
         Text(
             text = number.toString(),

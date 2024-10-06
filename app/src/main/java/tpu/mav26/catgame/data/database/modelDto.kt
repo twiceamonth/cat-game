@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Settings(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    var mouseSize: Int = 3,
+    var mouseSize: Int = 2,
     var mouseCount: Int = 3,
     var mouseSpeed: Int = 3
 )

@@ -6,5 +6,6 @@ object Consts {
     val BottomBarItems = listOf(
         BottomBarScreens.Settings, BottomBarScreens.Main, BottomBarScreens.Score
     )
+
     val baseMouseSize = 50
 }

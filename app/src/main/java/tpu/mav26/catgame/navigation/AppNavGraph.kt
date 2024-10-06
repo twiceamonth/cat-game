@@ -20,6 +20,7 @@ import tpu.mav26.catgame.ui.screens.Game
 import tpu.mav26.catgame.ui.screens.Score
 import tpu.mav26.catgame.ui.screens.Settings
 import tpu.mav26.catgame.ui.screens.SplashScreen
+import kotlin.random.Random
 
 @Composable
 fun AppNavGraph(
@@ -27,6 +28,10 @@ fun AppNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    var randomBackground by remember {
+        mutableIntStateOf(viewModel.bcgImageList[Random.nextInt(0, 3)])
+    }
+
     NavHost(navController = navController, startDestination = Routes.CAT_GAME_SPLASH) {
         composable(Routes.CAT_GAME_SPLASH) {
             SplashScreen(navController = navController)
@@ -35,9 +40,11 @@ fun AppNavGraph(
         composable(Routes.CAT_GAME_GAME) {
             Game(
                 viewModel = viewModel,
+                randomBackground = randomBackground,
                 modifier = modifier,
                 onGoHome = {
                     viewModel.onExitSaveScore()
+                    randomBackground = viewModel.bcgImageList[Random.nextInt(0, 3)]
                     navController.navigate(Routes.CAT_GAME_HOME) {
                         popUpTo(Routes.CAT_GAME_GAME) {
                             inclusive = true
@@ -69,6 +76,7 @@ fun AppNavGraph(
                         )
 
                         Routes.CAT_GAME_MAIN -> CatGameMain(
+                            randomBackground = randomBackground,
                             modifier = modifier.padding(innerPadding),
                             onStart = {
                                 navController.navigate(Routes.CAT_GAME_GAME) {
