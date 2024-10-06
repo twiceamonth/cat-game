@@ -9,10 +9,13 @@ import androidx.room.Update
 interface Dao {
 
     @Query("SELECT * FROM Settings")
-    fun getSettings(): Settings
+    fun getSettings(): Settings?
 
     @Query("SELECT * FROM ScoreRowItem ORDER BY id DESC LIMIT 10")
     fun getScore(): List<ScoreRowItem>
+
+    @Insert
+    fun setSettings(settings: Settings)
 
     @Update
     fun updateSettings(settings: Settings)
